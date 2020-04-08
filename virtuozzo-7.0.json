@@ -19,23 +19,23 @@
   "post-processors": [
     {
       "type": "vagrant",
-      "output": "builds/virtuozzo-7-0-x64-{{.Provider}}.box"
+      "output": "builds/{{user `template`}}-{{.Provider}}.box"
     }
   ],
   "builders": [
     {
       "type": "virtualbox-iso",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}}<enter><wait>"
+        "c linux /images/pxeboot/vmlinuz text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}}<enter>initrd /images/pxeboot/initrd.img<enter>boot<enter><wait>"
       ],
-      "boot_wait": "10s",
-      "disk_size": 40520,
+      "boot_wait": "7s",
+      "disk_size": 65536,
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
       "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `iso_url`}}",
-      "output_directory": "packer-{{user `template`}}-{{.Provider}}",
+      "output_directory": "packer-{{user `template`}}-virtualbox",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -45,23 +45,24 @@
       "virtualbox_version_file": ".vbox_version",
       "vboxmanage": [
         [ "modifyvm", "{{.Name}}", "--memory", "512" ],
-        [ "modifyvm", "{{.Name}}", "--cpus", "1" ]
+        [ "modifyvm", "{{.Name}}", "--cpus", "1" ],
+        [ "modifyvm", "{{.Name}}", "--nested-hw-virt", "on" ]
       ],
       "vm_name": "{{user `template`}}"
     },
     {
       "type": "vmware-iso",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}}<enter><wait>"
+        "c linux /images/pxeboot/vmlinuz text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}}<enter>initrd /images/pxeboot/initrd.img<enter>boot<enter><wait>"
       ],
-      "boot_wait": "10s",
-      "disk_size": 40520,
+      "boot_wait": "7s",
+      "disk_size": 65536,
       "guest_os_type": "centos-64",
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
       "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `iso_url`}}",
-      "output_directory": "packer-{{user `template`}}-{{.Provider}}",
+      "output_directory": "packer-{{user `template`}}-vmware",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -78,16 +79,16 @@
     {
       "type": "parallels-iso",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}}<enter><wait>"
+        "c linux /images/pxeboot/vmlinuz text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}}<enter>initrd /images/pxeboot/initrd.img<enter>boot<enter><wait>"
       ],
-      "boot_wait": "10s",
-      "disk_size": 40520,
+      "boot_wait": "7s",
+      "disk_size": 65536,
       "guest_os_type": "psbm",
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
       "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `iso_url`}}",
-      "output_directory": "packer-{{user `template`}}-{{.Provider}}",
+      "output_directory": "packer-{{user `template`}}-parallels",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -96,16 +97,18 @@
       "parallels_tools_flavor": "lin",
       "prlctl": [
         [ "set", "{{.Name}}", "--memsize", "512" ],
-        [ "set", "{{.Name}}", "--cpus", "1" ]
+        [ "set", "{{.Name}}", "--cpus", "1" ],
+        [ "set", "{{.Name}}", "--nested-virt", "on"],
+        [ "set", "{{.Name}}", "--disable-timezone-sync", "on" ]
       ],
       "vm_name": "{{user `template`}}"
     }
   ],
   "variables": {
-    "iso_checksum": "44375e5596c652ea5cf94201803fc1a62dd9b8b6bb98acdd6bf1095c89d150c9",
+    "iso_checksum": "7462d3b8f5c723961d4ce39542a4d49656594039b24bdfbf78594bb5ec43b3a3",
     "iso_checksum_type": "sha256",
-    "iso_url": "https://download.openvz.org/virtuozzo/releases/7.0-beta2/x86_64/iso/VZ-7.0.0-1196-x86_64-DVD.iso",
+    "iso_url": "https://download.openvz.org/virtuozzo/releases/7.0/x86_64/iso/openvz-iso-7.0.13-216.iso",
     "ks_path": "virtuozzo-7.0/ks.cfg",
-    "template": "virtuozzo-7.0-x64"
+    "template": "openvz-7.0-x64"
   }
 }

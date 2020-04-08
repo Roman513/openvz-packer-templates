@@ -1,7 +1,8 @@
 OpenVZ packer templates
 =======================
 
-Packer templates for building base [OpenVZ and Virtuozzo VM boxes](https://atlas.hashicorp.com/OpenVZ/).
+Packer templates for building base [OpenVZ VM box](https://app.vagrantup.com/Roman513/boxes/OpenVZ7).
+Based on Sergey Bronnikov's sources https://github.com/ligurio/openvz-packer-templates
 
 Usage
 =====
@@ -14,13 +15,12 @@ appropriate directory.
 
 If you're using Homebrew:
 
-    $ brew tap homebrew/binary
     $ brew install packer
 
 Running Packer
 --------------
 
-    $ git clone https://github.com/ligurio/openvz-packer-templates
+    $ git clone https://github.com/Roman513/openvz-packer-templates
     $ packer build virtuozzo-7.0.json
 
 If you want to build only VirtualBox:
@@ -29,11 +29,11 @@ If you want to build only VirtualBox:
 
 The result box will be available in `builds/` directory.
 
-### Virtuozzo 7.0 Beta 2
+### Virtuozzo 7.0
 
-By default the box `virtuozzo-7.0` will be built using the ISO from the latest
-released milestone of Virtuozzo 7.0. At this moment it is _7.0-beta1_
-If you want to build the box `virtuozzo-7.0` from the current factory ISO build, you
+By default the box `OpenVZ7` will be built using the ISO from the latest
+released version of Virtuozzo distribution of OpenVZ 7.0. At this moment it is _7.0.13-216_
+If you want to build the box `OpenVZ7` from the current factory ISO build, you
 should override `iso_url` and `iso_checksum` variables, for example:
 
 ```console
@@ -46,11 +46,11 @@ $ packer build -var "iso_url=${VZ_FACTORY_URL}" -var "iso_checksum=${VZ_FACTORY_
 Using Vagrant box
 -----------------
 
-	$ vagrant init OpenVZ/Virtuozzo-7
+	$ vagrant init Roman513/OpenVZ7
 	$ vagrant up --provider virtualbox
 	$ vagrant ssh
 
 Supported versions
 ------------------
 
-This templates was tested using a packer 0.8.1.
+This templates was tested using a packer 1.5.5.
