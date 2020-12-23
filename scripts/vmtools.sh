@@ -8,8 +8,10 @@ case "$PACKER_BUILDER_TYPE" in
 virtualbox-iso|virtualbox-ovf)
     mkdir -p /tmp/vbox;
     ver="`cat $HOME_DIR/.vbox_version`";
-    mount -o loop $HOME_DIR/VBoxGuestAdditions_${ver}.iso /tmp/vbox;
-    sh /tmp/vbox/VBoxLinuxAdditions.run \
+    mount -o ro,loop $HOME_DIR/VBoxGuestAdditions_${ver}.iso /tmp/vbox;
+    yum install -y --skip-broken \
+        perl cpp gcc make bzip2 tar kernel-headers kernel-devel kernel-uek-devel || true;
+    sh /tmp/vbox/VBoxLinuxAdditions.run --nox11 \
         || echo "VBoxLinuxAdditions.run exited $? and is suppressed." \
             "For more read https://www.virtualbox.org/ticket/12479";
     umount /tmp/vbox;
@@ -21,7 +23,7 @@ vmware-iso|vmware-vmx)
     yum install -y kernel-headers kernel-devel gcc make net-tools
     mkdir -p /tmp/vmfusion;
     mkdir -p /tmp/vmfusion-archive;
-    mount -o loop $HOME_DIR/linux.iso /tmp/vmfusion;
+    mount -o ro,loop $HOME_DIR/linux.iso /tmp/vmfusion;
     tar xzf /tmp/vmfusion/VMwareTools-*.tar.gz -C /tmp/vmfusion-archive;
     /tmp/vmfusion-archive/vmware-tools-distrib/vmware-install.pl --force-install;
     umount /tmp/vmfusion;
@@ -32,7 +34,7 @@ vmware-iso|vmware-vmx)
 
 parallels-iso|parallels-pvm)
     mkdir -p /tmp/parallels;
-    mount -o loop $HOME_DIR/prl-tools-lin.iso /tmp/parallels;
+    mount -o ro,loop $HOME_DIR/prl-tools-lin.iso /tmp/parallels;
     /tmp/parallels/install --install-unattended-with-deps \
       || (code="$?"; \
           echo "Parallels tools installation exited $code, attempting" \

@@ -1,7 +1,7 @@
 #!/bin/sh -eux
 
 # Remove development and kernel source packages
-yum -y remove gcc cpp kernel-devel kernel-headers
+yum remove -y gcc cpp kernel-headers kernel-devel kernel-uek-devel
 yum -y clean all
 
 for ndev in `ls -1 /etc/sysconfig/network-scripts/ifcfg-*`; do

@@ -33,7 +33,6 @@
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
-      "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `iso_url`}}",
       "output_directory": "packer-{{user `template`}}-virtualbox",
       "ssh_username": "vagrant",
@@ -44,7 +43,7 @@
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
       "vboxmanage": [
-        [ "modifyvm", "{{.Name}}", "--memory", "512" ],
+        [ "modifyvm", "{{.Name}}", "--memory", "1024" ],
         [ "modifyvm", "{{.Name}}", "--cpus", "1" ],
         [ "modifyvm", "{{.Name}}", "--nested-hw-virt", "on" ]
       ],
@@ -60,7 +59,6 @@
       "guest_os_type": "centos-64",
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
-      "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `iso_url`}}",
       "output_directory": "packer-{{user `template`}}-vmware",
       "ssh_username": "vagrant",
@@ -71,7 +69,7 @@
       "tools_upload_flavor": "linux",
       "vm_name": "{{user `template`}}",
       "vmx_data": {
-        "memsize": "512",
+        "memsize": "1024",
         "numvcpus": "1",
         "cpuid.coresPerSocket": "1"
       }
@@ -86,7 +84,6 @@
       "guest_os_type": "psbm",
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
-      "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `iso_url`}}",
       "output_directory": "packer-{{user `template`}}-parallels",
       "ssh_username": "vagrant",
@@ -96,18 +93,18 @@
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
       "parallels_tools_flavor": "lin",
       "prlctl": [
-        [ "set", "{{.Name}}", "--memsize", "512" ],
+        [ "set", "{{.Name}}", "--memsize", "1024" ],
         [ "set", "{{.Name}}", "--cpus", "1" ],
         [ "set", "{{.Name}}", "--nested-virt", "on"],
+        [ "set", "{{.Name}}", "--pmu-virt", "on"],
         [ "set", "{{.Name}}", "--disable-timezone-sync", "on" ]
       ],
       "vm_name": "{{user `template`}}"
     }
   ],
   "variables": {
-    "iso_checksum": "7462d3b8f5c723961d4ce39542a4d49656594039b24bdfbf78594bb5ec43b3a3",
-    "iso_checksum_type": "sha256",
-    "iso_url": "https://download.openvz.org/virtuozzo/releases/7.0/x86_64/iso/openvz-iso-7.0.13-216.iso",
+    "iso_checksum": "sha256:308479b91e71fb64d80e30ac5a8eea0d57aeaa5bf706c8fbb02751e0e3020c29",
+    "iso_url": "https://download.openvz.org/virtuozzo/releases/7.0/x86_64/iso/openvz-iso-7.0.15-628.iso",
     "ks_path": "virtuozzo-7.0/ks.cfg",
     "template": "openvz-7.0-x64"
   }
